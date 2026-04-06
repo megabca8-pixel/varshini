@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEGAVARHINI | CYBER PORTFOLIO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --cyan: #00f3ff;
+            --magenta: #ff00ff;
+            --yellow: #f0f000;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --font-main: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --glow-cyan: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.2);
+            --glow-magenta: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Matrix Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .glitch-wrapper {
+            position: relative;
+        }
+
+        .glitch {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            position: relative;
+            color: var(--text);
+            letter-spacing: -2px;
+            line-height: 0.9;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--magenta);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--cyan);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            5% { clip: rect(70px, 9999px, 71px, 0); }
+            10% { clip: rect(29px, 9999px, 83px, 0); }
+            15% { clip: rect(16px, 9999px, 91px, 0); }
+            20% { clip: rect(2px, 9999px, 23px, 0); }
+            25% { clip: rect(45px, 9999px, 84px, 0); }
+            30% { clip: rect(37px, 9999px, 32px, 0); }
+            35% { clip: rect(34px, 9999px, 9px, 0); }
+            40% { clip: rect(16px, 9999px, 90px, 0); }
+            45% { clip: rect(76px, 9999px, 34px, 0); }
+            50% { clip: rect(13px, 9999px, 2px, 0); }
+            55% { clip: rect(35px, 9999px, 35px, 0); }
+            60% { clip: rect(6px, 9999px, 16px, 0); }
+            65% { clip: rect(2px, 9999px, 98px, 0); }
+            70% { clip: rect(32px, 9999px, 88px, 0); }
+            75% { clip: rect(94px, 9999px, 23px, 0); }
+            80% { clip: rect(45px, 9999px, 12px, 0); }
+            85% { clip: rect(69px, 9999px, 9px, 0); }
+            90% { clip: rect(24px, 9999px, 56px, 0); }
+            95% { clip: rect(89px, 9999px, 46px, 0); }
+            100% { clip: rect(26px, 9999px, 33px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 54px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(9px, 9999px, 38px, 0); }
+            25% { clip: rect(13px, 9999px, 24px, 0); }
+            30% { clip: rect(51px, 9999px, 3px, 0); }
+            35% { clip: rect(8px, 9999px, 84px, 0); }
+            40% { clip: rect(11px, 9999px, 95px, 0); }
+            45% { clip: rect(29px, 9999px, 83px, 0); }
+            50% { clip: rect(46px, 9999px, 37px, 0); }
+            55% { clip: rect(72px, 9999px, 63px, 0); }
+            60% { clip: rect(19px, 9999px, 9px, 0); }
+            65% { clip: rect(94px, 9999px, 14px, 0); }
+            70% { clip: rect(34px, 9999px, 39px, 0); }
+            75% { clip: rect(99px, 9999px, 93px, 0); }
+            80% { clip: rect(83px, 9999px, 47px, 0); }
+            85% { clip: rect(62px, 9999px, 8px, 0); }
+            90% { clip: rect(34px, 9999px, 11px, 0); }
+            95% { clip: rect(59px, 9999px, 83px, 0); }
+            100% { clip: rect(73px, 9999px, 13px, 0); }
+        }
+
+        .subtitle {
+            font-family: var(--font-mono);
+            color: var(--cyan);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-right: 2px solid var(--cyan);
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 3s steps(30, end) forwards, blink 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent }
+            50% { border-color: var(--cyan) }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.6;
+        }
+
+        .mouse {
+            width: 26px;
+            height: 42px;
+            border: 2px solid var(--text);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .mouse::before {
+            content: "";
+            width: 4px;
+            height: 8px;
+            background: var(--cyan);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 8px;
+            border-radius: 2px;
+            animation: scroll-wheel 2s infinite;
+        }
+
+        @keyframes scroll-wheel {
+            0% { transform: translate(-50%, 0); opacity: 1; }
+            100% { transform: translate(-50%, 20px); opacity: 0; }
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-transform: uppercase;
+        }
+
+        .section-title span {
+            color: var(--magenta);
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: var(--cyan);
+            background: rgba(0, 243, 255, 0.05);
+            transform: translateY(-5px);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: var(--cyan);
+            transition: height 0.3s ease;
+        }
+
+        .card:hover::before {
+            height: 100%;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--cyan);
+            font-family: var(--font-mono);
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            font-size: 0.8rem;
+            margin: 0.25rem;
+            font-family: var(--font-mono);
+        }
+
+        .contact-section {
+            text-align: center;
+            background: linear-gradient(to bottom, transparent, rgba(255, 0, 255, 0.05));
+        }
+
+        .email-link {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            color: var(--magenta);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .email-link:hover {
+            text-shadow: var(--glow-magenta);
+            letter-spacing: 2px;
+        }
+
+        .email-link::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--magenta);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .email-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        footer {
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Cyber HUD Elements */
+        .hud-border {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .hud-tl { top: 20px; left: 20px; width: 50px; height: 50px; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+        .hud-tr { top: 20px; right: 20px; width: 50px; height: 50px; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+        .hud-bl { bottom: 20px; left: 20px; width: 50px; height: 50px; border-bottom: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+        .hud-br { bottom: 20px; right: 20px; width: 50px; height: 50px; border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+
+        @media (max-width: 768px) {
+            .section-title { font-size: 2rem; }
+            .subtitle { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="hud-border hud-tl"></div>
+    <div class="hud-border hud-tr"></div>
+    <div class="hud-border hud-bl"></div>
+    <div class="hud-border hud-br"></div>
+
+    <div class="container">
+        <header>
+            <div class="glitch-wrapper">
+                <h1 class="glitch" data-text="MEGAVARHINI">MEGAVARSHINI</h1>
+            </div>
+            <p class="subtitle">BCA STUDENT // CYBER ARCHITECT</p>
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 2px;">SCROLL</span>
+            </div>
+        </header>
+
+        <section id="about" class="reveal">
+            <h2 class="section-title"><span>01.</span> ABOUT_ME</h2>
+            <div class="card">
+                <p>I am a passionate BCA student dedicated to exploring the intersection of technology and creativity. My focus lies in building secure, efficient, and visually stunning digital experiences. I thrive in the fast-paced world of cyber development, constantly upgrading my skills to stay ahead of the curve.</p>
+            </div>
+        </section>
+
+        <section id="skills" class="reveal">
+            <h2 class="section-title"><span>02.</span> TECH_STACK</h2>
+            <div class="grid-layout">
+                <div class="card">
+                    <h3>PROGRAMMING</h3>
+                    <div class="skill-tag">JAVA</div>
+                    <div class="skill-tag">PYTHON</div>
+                    <div class="skill-tag">C++</div>
+                    <div class="skill-tag">JAVASCRIPT</div>
+                </div>
+                <div class="card">
+                    <h3>WEB_DEV</h3>
+                    <div class="skill-tag">HTML5</div>
+                    <div class="skill-tag">CSS3</div>
+                    <div class="skill-tag">REACT</div>
+                    <div class="skill-tag">TAILWIND</div>
+                </div>
+                <div class="card">
+                    <h3>DATABASE</h3>
+                    <div class="skill-tag">MYSQL</div>
+                    <div class="skill-tag">MONGODB</div>
+                    <div class="skill-tag">POSTGRESQL</div>
+                </div>
+                <div class="card">
+                    <h3>CYBER_SECURITY</h3>
+                    <div class="skill-tag">NETWORK_SECURITY</div>
+                    <div class="skill-tag">ETHICAL_HACKING</div>
+                    <div class="skill-tag">CRYPTOGRAPHY</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="reveal contact-section">
+            <h2 class="section-title" style="justify-content: center;"><span>03.</span> CONNECT</h2>
+            <p style="margin-bottom: 2rem; font-family: var(--font-mono);">READY TO COLLABORATE? SEND A TRANSMISSION.</p>
+            <a href="mailto:nmegabca8@gmail.com" class="email-link">megabca8@gmail.com</a>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 MEGAVARSHINI // DESIGNED FOR THE FUTURE</p>
+            <p style="margin-top: 0.5rem; font-size: 0.6rem;">SYSTEM_STATUS: ONLINE // ENCRYPTION: ACTIVE</p>
+        </footer>
+    </div>
+
+    <script>
+        // Matrix Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00f3ff';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Scroll Reveal
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+
+        // Resize Canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
